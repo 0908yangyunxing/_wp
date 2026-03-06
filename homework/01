@@ -1,1 +1,144 @@
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>個人介紹</title>
+    <style>
+        /* 基本頁面設定 */
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            line-height: 1.6; 
+            margin: 0; 
+            padding: 0; 
+            background-color: #f8f9fa; 
+            color: #333; 
+        }
+        
+        /* 頂部標題區塊 */
+        header { 
+            background: #2c3e50; 
+            color: #ffffff; 
+            padding: 3rem 0; 
+            text-align: center; 
+        }
+        header h1 { 
+            margin: 0; 
+            font-size: 2.8rem; 
+        }
+        header p { 
+            margin: 10px 0 0; 
+            font-size: 1.2rem; 
+            color: #1abc9c; 
+        }
 
+        /* 內容容器 */
+        .container { 
+            width: 80%; 
+            max-width: 900px; 
+            margin: 2rem auto; 
+        }
+
+        /* 各個區塊樣式 */
+        section { 
+            background: #ffffff; 
+            padding: 30px; 
+            margin-bottom: 25px; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
+        }
+        h2 { 
+            color: #2c3e50; 
+            border-bottom: 2px solid #1abc9c; 
+            padding-bottom: 10px; 
+            margin-top: 0;
+        }
+        
+        /* 列表與專案樣式 */
+        ul { 
+            list-style-type: none; 
+            padding-left: 0; 
+        }
+        ul li {
+            background: #ecf0f1;
+            display: inline-block;
+            margin: 0 10px 10px 0;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.95rem;
+        }
+        .project { 
+            margin-bottom: 20px; 
+            padding-bottom: 15px;
+            border-bottom: 1px dashed #ecf0f1;
+        }
+        .project:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .project h3 { 
+            margin: 0 0 10px 0; 
+            color: #34495e; 
+        }
+
+        /* 頁尾與連結 */
+        a { color: #1abc9c; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        footer { 
+            text-align: center; 
+            padding: 1.5rem; 
+            background: #2c3e50; 
+            color: #bdc3c7; 
+            margin-top: 2rem; 
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>楊云行</h1>
+    <p>軟體開發者 | 位於 台灣金門</p>
+</header>
+
+<div class="container">
+    <section id="about">
+        <h2>關於我</h2>
+        <p>你好！我是一名熱愛鑽研技術的開發者。我喜歡透過程式碼解決問題，平時除了專注於專案開發，也喜歡廣泛閱讀與探索不同的領域，例如研究槍械的發展歷史等。我樂於學習新技術，並將其應用在實際的系統開發中。</p>
+    </section>
+
+    <section id="skills">
+        <h2>專業技能</h2>
+        <ul>
+            <li>Python</li>
+            <li>C 語言</li>
+            <li>影像處理 (Image Processing)</li>
+            <li>資料結構與演算法</li>
+            <li>Google Colab 環境操作</li>
+        </ul>
+    </section>
+
+    <section id="projects">
+        <h2>專案經驗</h2>
+        <div class="project">
+            <h3>車牌辨識系統</h3>
+            <p>使用 Python 與影像處理技術所開發的車牌辨識程式。專案於 Google Colab 環境下建置，並成功串接 Google Drive 進行測試圖檔的讀取與分析。</p>
+        </div>
+        <div class="project">
+            <h3>影像物件計數程式</h3>
+            <p>撰寫自動化的 Python 腳本，透過影像處理演算法精準計算並辨識照片中的特定物件數量。</p>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2>聯絡方式</h2>
+        <p>Email：<a href="mailto:your.email@example.com">your.email@example.com</a></p>
+        <p>GitHub：<a href="#" target="_blank">github.com/yourusername</a></p>
+    </section>
+</div>
+
+<footer>
+    <p>&copy; 2026 [楊云行]. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
