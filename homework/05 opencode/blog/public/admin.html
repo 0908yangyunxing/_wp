@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>網誌管理</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
+    h1 { margin-bottom: 20px; }
+    .form-group { margin-bottom: 15px; }
+    label { display: block; margin-bottom: 5px; font-weight: bold; }
+    input[type="text"], textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-family: inherit; }
+    textarea { min-height: 200px; resize: vertical; }
+    .btn { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    .btn:hover { background: #0056b3; }
+    .btn-danger { background: #dc3545; margin-left: 10px; }
+    .btn-danger:hover { background: #c82333; }
+    .post-item { background: white; padding: 15px; margin-bottom: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+    .post-info h3 { margin-bottom: 5px; }
+    .post-info p { color: #666; font-size: 14px; }
+    .post-actions { display: flex; gap: 10px; }
+    .back { display: inline-block; margin-bottom: 20px; color: #007bff; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <a href="/" class="back">← 返回網誌</a>
+  <h1>管理文章</h1>
+  
+  <div class="form-group">
+    <label>標題</label>
+    <input type="text" id="title" placeholder="輸入標題">
+  </div>
+  <div class="form-group">
+    <label>內容</label>
+    <textarea id="content" placeholder="輸入內容"></textarea>
+  </div>
+  <button class="btn" onclick="createPost()">發布文章</button>
+
+  <h2 style="margin: 30px 0 15px;">文章列表</h2>
+  <div id="posts"></div>
+
+  <script>
+    async function loadPosts() {
+      const res = await fetch('/api/posts');
+      const posts = await res.json();
+      const container = document.getElementById('posts');
+      if (posts.length === 0) {
+        container.innerHTML = '<p style="color:#999;">尚無文章</p>';
+        return;
+      }
+      container.innerHTML = posts.map(post => `
+        <div class="post-item">
+          <div class="post-info">
+            <h3>${escapeHtml(post.title)}</h3>
+            <p>${new Date(post.created_at).toLocaleString('zh-TW')}</p>
+          </div>
+          <div class="post-actions">
+            <button class="btn btn-danger" onclick="deletePost(${post.id})">刪除</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function createPost() {
+      const title = document.getElementById('title').value;
+      const content = document.getElementById('content').value;
+      
+      if (!title || !content) {
+        alert('請輸入標題和內容');
+        return;
+      }
+
+      await fetch('/api/posts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, content })
+      });
+
+      document.getElementById('title').value = '';
+      document.getElementById('content').value = '';
+      loadPosts();
+    }
+
+    async function deletePost(id) {
+      if (!confirm('確定要刪除這篇文章嗎？')) return;
+      await fetch(`/api/posts/${id}`, { method: 'DELETE' });
+      loadPosts();
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    loadPosts();
+  </script>
+</body>
+</html>

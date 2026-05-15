@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>問卷調查表單</title>
+    <style>
+        /* 基本頁面排版與背景 */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        /* 表單容器樣式 */
+        .survey-container {
+            background: #fff;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        
+        /* 每個問題的區塊間距 */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        /* 標籤字體加粗 */
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        /* 輸入框、下拉選單與文字區域樣式 */
+        input[type="text"],
+        input[type="email"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 15px;
+        }
+        
+        textarea {
+            resize: vertical; /* 允許垂直拉伸 */
+            height: 100px;
+        }
+        
+        /* 單選與多選按鈕的橫向排列 */
+        .radio-group, .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .radio-group label, .checkbox-group label {
+            font-weight: normal;
+            display: inline-flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .radio-group input, .checkbox-group input {
+            margin-right: 5px;
+        }
+        
+        /* 按鈕區塊置中與樣式 */
+        .button-group {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin: 0 10px;
+        }
+        
+        button[type="reset"] {
+            background-color: #95a5a6;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        button[type="reset"]:hover {
+            background-color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+
+<div class="survey-container">
+    <h2>顧客滿意度問卷調查</h2>
+    
+    <!-- 表單開始 -->
+    <form action="#" method="POST">
+        
+        <!-- 簡答題：姓名 -->
+        <div class="form-group">
+            <label for="name">姓名：</label>
+            <input type="text" id="name" name="name" placeholder="請輸入您的姓名" required>
+        </div>
+
+        <!-- 簡答題：電子郵件 -->
+        <div class="form-group">
+            <label for="email">電子郵件：</label>
+            <input type="email" id="email" name="email" placeholder="請輸入您的電子郵件" required>
+        </div>
+
+        <!-- 下拉選單：年齡區間 -->
+        <div class="form-group">
+            <label for="age">您的年齡區間：</label>
+            <select id="age" name="age" required>
+                <option value="" disabled selected>請選擇...</option>
+                <option value="under18">18歲以下</option>
+                <option value="18-30">18 - 30歲</option>
+                <option value="31-45">31 - 45歲</option>
+                <option value="46-60">46 - 60歲</option>
+                <option value="above60">60歲以上</option>
+            </select>
+        </div>
+
+        <!-- 單選題：滿意度 -->
+        <div class="form-group">
+            <label>您對我們的整體服務滿意嗎？</label>
+            <div class="radio-group">
+                <label><input type="radio" name="satisfaction" value="very_satisfied" required> 非常滿意</label>
+                <label><input type="radio" name="satisfaction" value="satisfied"> 滿意</label>
+                <label><input type="radio" name="satisfaction" value="neutral"> 普通</label>
+                <label><input type="radio" name="satisfaction" value="dissatisfied"> 不滿意</label>
+                <label><input type="radio" name="satisfaction" value="very_dissatisfied"> 非常不滿意</label>
+            </div>
+        </div>
+
+        <!-- 多選題：資訊來源 -->
+        <div class="form-group">
+            <label>您通常從何處得知我們的資訊？（可多選）</label>
+            <div class="checkbox-group">
+                <label><input type="checkbox" name="source" value="social_media"> 社群媒體</label>
+                <label><input type="checkbox" name="source" value="friends"> 親友推薦</label>
+                <label><input type="checkbox" name="source" value="search_engine"> 網路搜尋</label>
+                <label><input type="checkbox" name="source" value="ads"> 廣告</label>
+                <label><input type="checkbox" name="source" value="other"> 其他</label>
+            </div>
+        </div>
+
+        <!-- 文字區域：開放式意見 -->
+        <div class="form-group">
+            <label for="feedback">其他寶貴意見或建議：</label>
+            <textarea id="feedback" name="feedback" placeholder="歡迎在此留下您的想法..."></textarea>
+        </div>
+
+        <!-- 提交與重設按鈕 -->
+        <div class="button-group">
+            <button type="submit">提交問卷</button>
+            <button type="reset">重新填寫</button>
+        </div>
+        
+    </form>
+</div>
+
+</body>
+</html>
