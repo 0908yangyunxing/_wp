@@ -1,0 +1,14 @@
+{
+  "name": "blognew",
+  "version": "2.0.0",
+  "description": "改良版部落格 - 支援標籤、搜尋、分頁、Markdown 與文章編輯",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "marked": "^15.0.7",
+    "sql.js": "^1.10.3"
+  }
+}

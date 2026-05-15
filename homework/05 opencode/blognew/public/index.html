@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>我的網誌</title>
+  <script src="/lib/marked/marked.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans TC', sans-serif;
+      background: #f0f2f5; color: #1a1a2e; line-height: 1.6;
+    }
+    .container { max-width: 860px; margin: 0 auto; padding: 0 20px; }
+    header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white; padding: 40px 0 30px; margin-bottom: 30px;
+    }
+    header .container { display: flex; justify-content: space-between; align-items: center; }
+    header h1 { font-size: 28px; font-weight: 700; }
+    .btn {
+      padding: 10px 22px; border: none; border-radius: 8px; cursor: pointer;
+      font-size: 14px; font-weight: 600; text-decoration: none; display: inline-flex;
+      align-items: center; gap: 6px; transition: all 0.2s;
+    }
+    .btn-primary { background: white; color: #667eea; }
+    .btn-primary:hover { background: #f0f0f0; transform: translateY(-1px); }
+    .btn-sm { padding: 6px 14px; font-size: 13px; }
+    .btn-outline { background: transparent; border: 1px solid #667eea; color: #667eea; }
+    .btn-outline:hover { background: #667eea; color: white; }
+    .btn-outline.active { background: #667eea; color: white; }
+    .toolbar {
+      background: white; border-radius: 12px; padding: 16px 20px;
+      margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
+    }
+    .search-box {
+      flex: 1; min-width: 200px; position: relative;
+    }
+    .search-box input {
+      width: 100%; padding: 10px 16px; border: 2px solid #e0e0e0; border-radius: 8px;
+      font-size: 14px; outline: none; transition: border-color 0.2s;
+    }
+    .search-box input:focus { border-color: #667eea; }
+    .tags-filter { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .tag-badge {
+      display: inline-block; padding: 3px 10px; border-radius: 12px;
+      font-size: 12px; font-weight: 500; cursor: pointer; user-select: none;
+      transition: all 0.2s;
+    }
+    .post-card {
+      background: white; border-radius: 12px; padding: 24px 28px;
+      margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .post-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+    .post-card h2 {
+      font-size: 22px; margin-bottom: 8px; color: #1a1a2e;
+    }
+    .post-card h2 a { color: inherit; text-decoration: none; }
+    .post-card h2 a:hover { color: #667eea; }
+    .post-meta {
+      font-size: 13px; color: #888; margin-bottom: 12px;
+      display: flex; gap: 16px; flex-wrap: wrap; align-items: center;
+    }
+    .post-meta .tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .tag {
+      display: inline-block; padding: 2px 10px; border-radius: 10px;
+      font-size: 12px; background: #eef0ff; color: #667eea;
+    }
+    .post-content { color: #444; line-height: 1.8; overflow-wrap: break-word; }
+    .post-content p { margin-bottom: 12px; }
+    .post-content h1, .post-content h2, .post-content h3 { margin: 20px 0 10px; color: #1a1a2e; }
+    .post-content h2 { font-size: 20px; }
+    .post-content h3 { font-size: 17px; }
+    .post-content ul, .post-content ol { margin: 8px 0 12px 24px; }
+    .post-content pre {
+      background: #1e1e2e; color: #cdd6f4; padding: 16px; border-radius: 8px;
+      overflow-x: auto; margin: 12px 0; font-size: 13px;
+    }
+    .post-content code { font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 13px; }
+    .post-content p > code { background: #f0f0f0; padding: 2px 6px; border-radius: 4px; }
+    .post-content blockquote {
+      border-left: 4px solid #667eea; padding: 8px 16px; margin: 12px 0;
+      background: #f8f9ff; color: #555;
+    }
+    .post-content img { max-width: 100%; border-radius: 8px; margin: 12px 0; }
+    .post-content a { color: #667eea; }
+    .read-more { margin-top: 12px; }
+    .read-more .btn { color: #667eea; padding: 0; background: none; font-weight: 600; }
+    .read-more .btn:hover { text-decoration: underline; }
+    .pagination {
+      display: flex; justify-content: center; align-items: center; gap: 12px;
+      margin: 30px 0 40px;
+    }
+    .pagination .page-btn {
+      padding: 8px 16px; border: 1px solid #ddd; border-radius: 8px;
+      background: white; cursor: pointer; font-size: 14px; transition: all 0.2s;
+    }
+    .pagination .page-btn:hover:not(:disabled) { border-color: #667eea; color: #667eea; }
+    .pagination .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .pagination .page-btn.active { background: #667eea; color: white; border-color: #667eea; }
+    .pagination .page-info { color: #888; font-size: 14px; }
+    .empty-state { text-align: center; padding: 60px 20px; color: #999; }
+    .empty-state p { font-size: 16px; margin-top: 8px; }
+    .loading { text-align: center; padding: 40px; color: #999; }
+    @media (max-width: 640px) {
+      header .container { flex-direction: column; gap: 12px; text-align: center; }
+      header h1 { font-size: 22px; }
+      .post-card { padding: 16px 18px; }
+      .toolbar { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>📝 我的網誌</h1>
+      <a href="/admin.html" class="btn btn-primary">⚙ 管理</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="toolbar">
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="搜尋文章..." oninput="onSearch()">
+      </div>
+      <div class="tags-filter" id="tagsFilter"></div>
+    </div>
+
+    <div id="postsContainer"></div>
+    <div class="pagination" id="pagination"></div>
+  </main>
+
+  <script>
+    let currentPage = 1;
+    let allTags = new Set();
+
+    async function loadPosts() {
+      const search = document.getElementById('searchInput').value.trim();
+      const activeTag = document.querySelector('.tag-badge.active');
+      const tag = activeTag ? activeTag.dataset.tag : '';
+      const params = new URLSearchParams({ page: currentPage, limit: 10 });
+      if (search) params.set('search', search);
+      if (tag) params.set('tag', tag);
+
+      const container = document.getElementById('postsContainer');
+      container.innerHTML = '<div class="loading">載入中...</div>';
+
+      const res = await fetch('/api/posts?' + params.toString());
+      const data = await res.json();
+      renderPosts(data);
+    }
+
+    function renderPosts(data) {
+      const container = document.getElementById('postsContainer');
+      const pagination = document.getElementById('pagination');
+
+      if (data.posts.length === 0) {
+        container.innerHTML = '<div class="empty-state"><div style="font-size:48px;">📭</div><p>尚無文章</p></div>';
+        pagination.innerHTML = '';
+        return;
+      }
+
+      data.posts.forEach(p => (p.tags || []).forEach(t => allTags.add(t)));
+      renderTagsFilter();
+
+      container.innerHTML = data.posts.map(post => {
+        const readingTime = Math.max(1, Math.ceil((post.content.length / 200)));
+        const preview = post.content.length > 300
+          ? marked.parse(post.content.slice(0, 300) + '...')
+          : marked.parse(post.content);
+        return `
+          <div class="post-card">
+            <h2><a href="/post.html?id=${post.id}">${escapeHtml(post.title)}</a></h2>
+            <div class="post-meta">
+              <span>📅 ${new Date(post.created_at).toLocaleString('zh-TW')}</span>
+              <span>📖 ${readingTime} 分鐘閱讀</span>
+              <span class="tags">${(post.tags || []).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}</span>
+            </div>
+            <div class="post-content">${preview}</div>
+            <div class="read-more"><a href="/post.html?id=${post.id}" class="btn">繼續閱讀 →</a></div>
+          </div>
+        `;
+      }).join('');
+
+      renderPagination(data);
+    }
+
+    function renderTagsFilter() {
+      const container = document.getElementById('tagsFilter');
+      const activeTag = document.querySelector('.tag-badge.active');
+      const activeTagName = activeTag ? activeTag.dataset.tag : '';
+      const tags = Array.from(allTags).sort();
+      container.innerHTML = '<span style="font-size:13px;color:#888;margin-right:4px;">標籤：</span>' +
+        `<span class="tag-badge ${!activeTagName ? 'active' : ''}" style="background:${!activeTagName ? '#667eea' : '#e0e0e0'};color:${!activeTagName ? 'white' : '#666'}" onclick="filterTag('')">全部</span>` +
+        tags.map(t => `<span class="tag-badge ${activeTagName === t ? 'active' : ''}" style="background:${activeTagName === t ? '#667eea' : '#e0e0e0'};color:${activeTagName === t ? 'white' : '#666'}" onclick="filterTag('${escapeHtml(t)}')">${escapeHtml(t)}</span>`).join('');
+    }
+
+    function renderPagination(data) {
+      const pagination = document.getElementById('pagination');
+      if (data.totalPages <= 1) { pagination.innerHTML = ''; return; }
+
+      let html = `<button class="page-btn" onclick="goToPage(${currentPage - 1})" ${currentPage <= 1 ? 'disabled' : ''}>← 上一頁</button>`;
+      html += `<span class="page-info">第 ${data.page} / ${data.totalPages} 頁</span>`;
+      html += `<button class="page-btn" onclick="goToPage(${currentPage + 1})" ${currentPage >= data.totalPages ? 'disabled' : ''}>下一頁 →</button>`;
+      pagination.innerHTML = html;
+    }
+
+    function goToPage(page) {
+      currentPage = page;
+      loadPosts();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function filterTag(tag) {
+      document.querySelectorAll('.tag-badge').forEach(el => {
+        el.style.background = el.dataset.tag === tag || (!el.dataset.tag && !tag) ? '#667eea' : '#e0e0e0';
+        el.style.color = el.dataset.tag === tag || (!el.dataset.tag && !tag) ? 'white' : '#666';
+      });
+      currentPage = 1;
+      loadPosts();
+    }
+
+    let searchTimer;
+    function onSearch() {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => { currentPage = 1; loadPosts(); }, 300);
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    loadPosts();
+  </script>
+</body>
+</html>
