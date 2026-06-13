@@ -7,7 +7,6 @@ const contents = [
 // 使用 map() 遍歷陣列，並將每個字串截斷加上 "..."
 const truncatedContents = contents.map(text => {
   return text.slice(0, 10) + "...";
-  // 💡 也可以用樣板字面值寫成： return `${text.slice(0, 10)}...`;
 });
 
 console.log(truncatedContents);
