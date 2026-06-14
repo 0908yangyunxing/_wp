@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>射擊遊戲</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container game-container">
+        <div id="hud">
+            <div class="hud-item">👤 <span id="playerNameDisplay"></span></div>
+            <div class="hud-item">⭐ 分數: <span id="scoreDisplay">0</span></div>
+            <div class="hud-item">⏱️ <span id="timerDisplay">3:00</span></div>
+            <div class="hud-item">🎯 軍人擊殺: <span id="soldierCount">0</span>/15</div>
+            <div class="hud-item">🎨 坦克擊殺: <span id="tankCount">0</span>/5</div>
+            <div class="hud-item" id="robotStatus">👾 機器怪物: <span id="robotStatusText">未解鎖</span></div>
+        </div>
+
+        <canvas id="gameCanvas"></canvas>
+
+        <div id="gameOverOverlay" class="hidden">
+            <div class="game-over-box">
+                <h1>⏰ 遊戲結束！</h1>
+                <h2>最終分數: <span id="finalScore">0</span></h2>
+                <p id="rankInfo"></p>
+                <button id="restartBtn" class="btn-start" onclick="goHome()">返回主選單</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>

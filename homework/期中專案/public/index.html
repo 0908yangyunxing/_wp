@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>射擊遊戲 - 主選單</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container menu-container">
+        <h1 class="title">🔫 簡易射擊遊戲</h1>
+
+        <div class="menu-card">
+            <h2>輸入玩家名稱</h2>
+            <input type="text" id="playerName" placeholder="請輸入名稱..." maxlength="10">
+            <button id="startBtn" class="btn-start" onclick="startGame()">開始遊戲</button>
+            <p id="nameError" class="error hidden">請輸入玩家名稱！</p>
+        </div>
+
+        <div class="target-info">
+            <h3>🎯 目標資訊</h3>
+            <div class="target-grid">
+                <div class="target-item"><span class="target-icon soldier">🪖</span> 軍人 <span class="points plus">+10</span></div>
+                <div class="target-item"><span class="target-icon civilian">👤</span> 平民 <span class="points minus">-30</span></div>
+                <div class="target-item"><span class="target-icon tank">🎨</span> 坦克 <span class="points plus">+50</span></div>
+                <div class="target-item"><span class="target-icon robot">👾</span> 機器怪物 <span class="points plus">+100</span></div>
+            </div>
+        </div>
+
+        <div class="leaderboard">
+            <h2>🏆 排行榜 TOP 20</h2>
+            <table id="leaderboardTable">
+                <thead>
+                    <tr><th>#</th><th>名稱</th><th>分數</th><th>日期</th></tr>
+                </thead>
+                <tbody id="leaderboardBody">
+                    <tr><td colspan="4">載入中...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        async function loadLeaderboard() {
+            try {
+                const res = await fetch('/api/leaderboard');
+                const data = await res.json();
+                const tbody = document.getElementById('leaderboardBody');
+                if (data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4">暫無紀錄</td></tr>';
+                    return;
+                }
+                tbody.innerHTML = data.map((entry, i) =>
+                    `<tr${i < 3 ? ' class="top-three"' : ''}>
+                        <td>${i + 1}</td>
+                        <td>${escapeHtml(entry.name)}</td>
+                        <td>${entry.score}</td>
+                        <td>${entry.date || ''}</td>
+                    </tr>`
+                ).join('');
+            } catch {
+                document.getElementById('leaderboardBody').innerHTML = '<tr><td colspan="4">無法載入排行榜</td></tr>';
+            }
+        }
+
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        function startGame() {
+            const name = document.getElementById('playerName').value.trim();
+            if (!name) {
+                document.getElementById('nameError').classList.remove('hidden');
+                return;
+            }
+            document.getElementById('nameError').classList.add('hidden');
+            localStorage.setItem('playerName', name);
+            window.location.href = 'game.html';
+        }
+
+        document.getElementById('playerName').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') startGame();
+        });
+
+        loadLeaderboard();
+    </script>
+</body>
+</html>
