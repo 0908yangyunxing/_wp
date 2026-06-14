@@ -56,7 +56,7 @@
 9. `map()` 字串截斷
 10. 錯誤優先 callback 模式
 
-### [期中專案]— 射擊遊戲（Node.js + Canvas）
+### 期中專案 — 射擊遊戲（Node.js + Canvas）
 - **特色**：90 秒限時射擊，四種目標（軍人 +10、平民 -30、坦克 +50、機器怪物 +100），隱藏 BOSS 解鎖機制，排行榜系統，粒子特效與星空背景。
 - **技術**：Express 伺服器、HTML5 Canvas、JSON 檔案排行榜
 - **執行**：`npm install` → `npm start` → `http://localhost:3000`
